@@ -1,0 +1,117 @@
+// This program finds the average of three test scores that are inputted and displays the corresponding letter grade
+#include<iostream>
+#include<iomanip>
+using namespace std;
+//Function Prototypes
+double getScore();
+double calcAverage(double, double, double);
+char calcGrade(double);
+
+//Main
+void main()
+{
+	cout << setprecision(1) << fixed;
+	//declare variables 
+	double score1, score2, score3, avg;
+	char grade, another;
+	//do-while
+	do
+	{
+		//Call getScore 3x
+		score1 = getScore();
+		score2 = getScore();
+		score3 = getScore();
+		//Call calcAverage
+		avg = calcAverage(score1, score2, score3);
+		//Display average
+		cout << "Your average is " << avg << endl;
+		//Call calcGrade
+		grade = calcGrade(avg);
+		//Display grade
+		cout << "Your grade is " << grade << endl;
+		//Repeat?
+		cout << "Another? ";
+		cin >> another;
+		another = tolower(another);
+	} while (another == 'y');
+	cout << "Coded by Amani Ansari" << endl;
+}
+
+//getScore
+//Header and Function Deft.
+double getScore()
+{
+	double score;
+	cout << "Enter test score: ";
+	cin >> score;
+	while (score < 0 || score > 100)
+	{
+		cout << "Invalid, please re-enter: ";
+		cin >> score;
+	}
+	return score;
+}
+
+//calcAverage
+//Header and Function Deft.
+double calcAverage(double test1, double test2, double test3)
+{
+	//declare variables
+	double avg;
+	avg = (test1 + test2 + test3) / 3;
+	return avg;
+}
+
+//calcGrade
+//Header and Function Deft.
+char calcGrade(double average)
+{
+	//Declare grade
+	char grade;
+	if (average < 60)
+		grade = 'F';
+	else if (average < 70)
+		grade = 'D';
+	else if (average < 80)
+		grade = 'C';
+	else if (average < 90)
+		grade = 'B';
+	else
+		grade = 'A';
+	return grade;
+}
+
+/*
+Enter test score: 70
+Enter test score: 80
+Enter test score: 110
+Invalid, please re-enter: 92
+Your average is 80.7
+Your grade is B
+Another? y
+Enter test score: 55
+Enter test score: 88
+Enter test score: 78
+Your average is 73.7
+Your grade is C
+Another? y
+Enter test score: 85
+Enter test score: 90
+Enter test score: 98
+Your average is 91.0
+Your grade is A
+Another? y
+Enter test score: 50
+Enter test score: 62
+Enter test score: 55
+Your average is 55.7
+Your grade is F
+Another? Y
+Enter test score: 58
+Enter test score: 65
+Enter test score: 68
+Your average is 63.7
+Your grade is D
+Another? N
+Coded by Amani Ansari
+*/
