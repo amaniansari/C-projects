@@ -1,0 +1,139 @@
+//This program allows students to practice their addition, subtraction, multiplication, and division
+#include <iostream>
+#include <ctime>
+#include <iomanip>
+using namespace std;
+void main()
+{
+	//declare variables 
+	int rand1, rand2, user_ans, correct_ans, count, correct;
+	//Declare char
+	char operation, letter;
+	//Initialize counters
+	count = 0;
+	correct = 0;
+	//seed the random number generator
+	srand(time(0));
+	//Message
+	cout << "Welcome to the Math Tutor!" << endl;
+	do
+	{
+		//Define random numbers
+		rand1 = 1 + rand() % 12;
+		rand2 = 1 + rand() % 12;
+		//Display options 
+		cout << "Select an operation (+ - / *): ";
+		cin >> operation;
+		//switch statement for the difft. operations
+		switch (operation)
+		{
+		case '+': 
+			cout << rand1 << " + " << rand2 << " = ";
+			correct_ans = rand1 + rand2;
+			break;
+		case '-': 
+			if (rand1 > rand2)
+			{
+				cout << rand1 << " - " << rand2 << " = ";
+				correct_ans = rand1 - rand2;
+			}
+			else
+			{
+				cout << rand2 << " - " << rand1 << " = ";
+				correct_ans = rand2 - rand1;
+			}
+			break;
+		case '/': 
+			if (rand1 % rand2 == 0)
+			{
+				cout << rand1 << " / " << rand2 << " = ";
+				correct_ans = rand1 / rand2;
+			}
+			else
+			{
+				cout << (rand1 * rand2) << " / " << rand2 << " = ";
+				cin >> user_ans;
+				correct_ans = (rand1 * rand2) / rand2;
+			}
+				break;
+		case '*': 
+			cout << rand1 << " * " << rand2 << " = ";
+			correct_ans = rand1 * rand2;
+			break;
+		}
+		cin >> user_ans;
+		//increment counter
+		count++;
+		//Checking user answer + incrementing correct counter
+		if (user_ans == correct_ans)
+		{
+			cout << "That's right" << endl;
+			correct++;
+		}
+		else 
+		{
+			cout << "The answer is " << correct_ans << endl;
+		}
+		//restart?
+		cout << endl;
+		cout << "Another problem? ";
+		cin >> letter;
+		letter = toupper(letter);
+	} while (letter == 'Y');
+	//Display stuff
+	cout << "GAME STATISTICS" << endl;
+	cout << "Number of problems:     " << count << endl;
+	cout << "Number correct:         " << correct << endl;
+	//ratio of correct / count
+	cout << setprecision(2) << fixed;
+	double ratio = (double)(correct) / count;
+	cout << "Your score is " << (ratio * 100) << "%" << endl;
+	cout << endl;
+	cout << "Coded by Amani Ansari" << endl;
+}
+
+/*
+Welcome to the Math Tutor!
+Select an operation (+ - / *): *
+11 * 1 = 11
+That's right
+
+Another problem? y
+Select an operation (+ - / *): -
+8 - 5 = 3
+That's right
+
+Another problem? y
+Select an operation (+ - / *): /
+42 / 7 = 6
+That's right
+
+Another problem? Y
+Select an operation (+ - / *): *
+9 * 5 = 50
+The answer is 45
+
+Another problem? Y
+Select an operation (+ - / *): +
+1 + 5 = 8
+The answer is 6
+
+Another problem? Y
+Select an operation (+ - / *): -
+11 - 3 = 8
+That's right
+
+Another problem? Y
+Select an operation (+ - / *): /
+40 / 8 = 5
+That's right
+
+Another problem? n
+GAME STATISTICS
+Number of problems:     7
+Number correct:         5
+Your score is 71.43%
+
+Coded by Amani Ansari
+*/
+
