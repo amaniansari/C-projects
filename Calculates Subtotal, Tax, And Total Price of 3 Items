@@ -1,0 +1,104 @@
+//This program calculates and displays the subtotal of three items, the tax on those three items, and the total price. 
+#include<iostream>
+using namespace std;
+void main()
+{
+	//Declare all variables
+	double tax_rate, price1, price2, price3, subtotal, tax, totalAmount;
+	//Read inputs
+	//Read tax_rate, price1, price2, price3
+	cout << "Enter tax rate as percentage: ";
+	cin >> tax_rate;
+	cout << "Enter price of first item: ";
+	cin >> price1;
+	cout << "Enter price of second item: ";
+	cin >> price2;
+	cout << "Enter price of third item: ";
+	cin >> price3;
+	//Calculate subtotal, tax, totalAmount
+	subtotal = price1 + price2 + price3;
+	tax = (tax_rate / 100) * subtotal;
+	totalAmount = tax + subtotal;
+	//Display outputs
+	cout << "Subtotal: $" << subtotal << endl;
+	cout << "Tax: $" << tax << endl;
+	cout << "Total: $" << totalAmount << endl;
+	cout << "Coded by Amani Ansari" << endl;
+} 	//End main
+
+/*
+Enter tax rate as percentage: 7
+Enter price of first item: 22
+Enter price of second item: 10
+Enter price of third item: 15
+Subtotal: $47
+Tax: $3.29
+Total: $50.29
+Coded by Amani Ansari
+
+Enter tax rate as percentage: 5
+Enter price of first item: 10
+Enter price of second item: 20
+Enter price of third item: 30
+Subtotal: $60
+Tax: $3
+Total: $63
+Coded by Amani Ansari
+
+Enter tax rate as percentage: 8
+Enter price of first item: 19.50
+Enter price of second item: 22.95
+Enter price of third item: 32.75
+Subtotal: $75.2
+Tax: $6.016
+Total: $81.216
+Coded by Amani Ansari
+*/
+
+//Amani Ansari
+//CS-102-03 Lab 2 (HW) Prob 2
+//This program calculates one's BMI (Body Mass Index)
+#include<iostream>
+using namespace std;
+void main()
+{
+	//Declare all variables
+	double weight, height_ft, height_in, height, BMI;
+	//Read inputs
+	//Read weight, height_ft, height_in
+	cout << "Enter weight: ";
+	cin >> weight;
+	cout << "Enter height (feet): ";
+	cin >> height_ft;
+	cout << "Enter height (inches): ";
+	cin >> height_in;
+	// Calculate height
+	height = (height_ft * 12) + height_in;
+	//Calculate BMI
+	BMI = (weight * 703) / (height * height);
+	//Display BMI
+	cout << "Your BMI is " << BMI << endl;
+	cout << "Coded by Amani Ansari" << endl;
+}	//End main
+
+/*
+Enter weight: 180
+Enter height (feet): 5
+Enter height (inches): 8
+Your BMI is 27.3659
+Coded by Amani Ansari
+
+Enter weight: 200
+Enter height (feet): 6
+Enter height (inches): 0
+Your BMI is 27.1219
+Coded by Amani Ansari
+
+Enter weight: 140
+Enter height (feet): 5
+Enter height (inches): 4
+Your BMI is 24.0283
+Coded by Amani Ansari
+*/
+
+
