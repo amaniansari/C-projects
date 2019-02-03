@@ -1,0 +1,164 @@
+//This program reads data pertaining to students and from that data generates two reports after determining whether students were 
+// accepted to the school.
+#include<iomanip>
+#include<string>
+#include<fstream>
+#include<iostream>
+using namespace std;
+//create struct
+struct StudentInfo
+{
+	string student_name, admit_status;
+	double GPA;
+	int test_score;
+};
+
+//function prototypes
+int getData(StudentInfo[], int);
+string getStatus(double, int);
+void printReport(StudentInfo[], int);
+void printAdmit(StudentInfo[], int);
+
+//void main
+void main()
+{
+	//create array
+	const int size = 20;
+	StudentInfo student[size];
+	//declare variables
+	int student_num;
+
+	//call getData
+	student_num = getData(student, size);
+	//call printReport
+	printReport(student, student_num);
+	//call printAdmit
+	printAdmit(student, student_num);
+	//programmed by
+	cout << "Programmed by Amani Ansari" << endl;
+}
+
+//getData
+int getData(StudentInfo info[], int asize)
+{
+	//declare variables
+	string file_name, studentName, status;
+	double GPA;
+	int test_score, count = 0;
+	//prompt for file name
+	cout << "Enter name of student data file: ";
+	cin >> file_name;
+	//declare file
+	ifstream infile;
+	//open file
+	infile.open(file_name);
+	//verify file was opened
+	if (!infile.is_open())
+	{
+		cout << "File doesn't exist" << endl;
+	}
+	else
+	{
+		//read data from file
+		//first line
+		getline(infile, studentName, '#');
+		//echo data
+		//cout << "Name: " << studentName << endl;
+		while (!infile.eof())
+		{
+			infile >> GPA;
+			//cout << "GPA: " << GPA << endl;
+			infile >> test_score;
+			//cout << "Test Score: " << test_score << endl;
+			//store into array
+			info[count].student_name = studentName;
+			info[count].GPA = GPA;
+			info[count].test_score = test_score;
+			//call getStatus
+			info[count].admit_status = getStatus(GPA, test_score);
+			//cout << "Admittance status " << info[count].admit_status << endl;
+			//increment count
+			count++;
+
+			//check to see if array is full
+			if (count == asize)
+			{
+				cout << "Array is full" << endl;
+				return count;
+			}
+
+			infile.ignore();
+			getline(infile, studentName, '#');
+			//cout << "Name: " << studentName << endl;
+		}
+	}
+	return count;
+	//close input file
+	infile.close();
+}
+
+//getStatus
+string getStatus(double GPA, int testScore)
+{
+	if ((GPA >= 3.0 && testScore >= 60) || (GPA < 3.0 && testScore >= 80))
+	{
+		return "yes";
+	}
+	else
+		return "no";
+}
+
+//printReport
+void printReport(StudentInfo report[], int size)
+{
+	//declare variables
+	int i;
+	string report_name;
+	//create output file
+	ofstream outfile;
+	//prompt for report name
+	cout << "Enter name of file for student report: ";
+	cin >> report_name;
+	//open output file
+	outfile.open(report_name);
+	//outputting info.
+	outfile << "STUDENT REPORT" << endl;
+	outfile << endl;
+	outfile << setprecision(1) << fixed;
+	outfile << setw(15) << left << "Name" << setw(7) << right << "GPA" << setw(7) << "Score" << setw(10) << "Admitted?" << endl;
+	//cout array
+	for (i = 0; i < size; i++)
+		outfile << setw(15) << left << report[i].student_name << setw(7) << right << report[i].GPA << setw(5) << report[i].test_score << setw(9) << report[i].admit_status << endl;
+	//close output file
+	outfile.close();
+}
+
+//printAdmit
+void printAdmit(StudentInfo admit[], int size)
+{
+	int count = 0;
+	string accepted_students;
+	// create output file
+	ofstream outfile;
+	//prompt for admit name
+	cout << "Enter name of file for accepted students report: ";
+	cin >> accepted_students;
+	//open file 
+	outfile.open(accepted_students);
+	//begin printing out
+	outfile << "ACCEPTED STUDENTS" << endl;
+	outfile << endl;
+	for (int i = 0; i < size; i++)
+	{
+		if (admit[i].admit_status == "yes")
+		{
+			outfile << admit[i].student_name << endl;
+			count++;
+		}
+	}
+	outfile << endl;
+	outfile << "Number of students accepted: " << count << endl;
+	//close output file
+	outfile.close();
+}
+
