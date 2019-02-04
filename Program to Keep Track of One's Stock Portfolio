@@ -1,0 +1,280 @@
+//This program uses information in files to keep track of one's stock portfolio
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include<string>
+
+using namespace std;
+
+//function prototypes
+void addStock(string);
+void displayStocks(string);
+//Main
+void main()
+{
+	//declare variables
+	string fileName;
+	int option;
+	//prompt user for file name
+	cout << "What is the name of the file to process? ";
+	cin >> fileName;
+	cout << endl;
+	//Display Menu
+	cout << "Options" << endl;
+	cout << "1      Add Stock" << endl;
+	cout << "2      Display Profit/Loss" << endl;
+	cout << "3      Exit Program" << endl;
+	cout << "Enter menu option: ";
+	cin >> option;
+	while (option != 3)
+	{
+		switch (option)
+		{
+		case 1: addStock(fileName);
+			break;
+		case 2: displayStocks(fileName);
+			break;
+		}
+		//Display Menu
+		cout << "Options" << endl;
+		cout << "1      Add Stock" << endl;
+		cout << "2      Display Profit/Loss" << endl;
+		cout << "3      Exit Program" << endl;
+		cout << "Enter menu option: ";
+		cin >> option;
+	}
+	cout << "Programmed by Amani Ansari" << endl;
+}
+
+//addStock
+void addStock(string file)
+{
+	//declare variables
+	string company, x, X;
+	int shares;
+	double purchase_price, current_price;
+	//create input file object 
+	ofstream outfile;
+	//open file
+	outfile.open(file, ios::app);
+	//verify file was opened correctly
+	if (!outfile.is_open())
+	{
+		cout << "File doesn't exist" << endl;
+	}
+	else
+	{
+		cin.ignore();
+		cout << "Enter company (X to stop adding records): ";
+		getline(cin, company);
+		while (company != "x" && company != "X")
+		{
+			//begin to read data
+			outfile << company << "#";
+			cout << "Enter number of shares: ";
+			cin >> shares;
+			outfile << shares << " ";
+			cout << "Enter purchase price: ";
+			cin >> purchase_price;
+			outfile << purchase_price << " ";
+			cout << "Enter current price: ";
+			cin >> current_price;
+			outfile << current_price << endl;
+			cin.ignore();
+			cout << "Enter company (X to stop adding records): ";
+			getline(cin, company);
+		}
+			cout << "New records have been added" << endl;
+	}
+	//close file
+	outfile.close();
+}
+
+//displayStocks
+void displayStocks(string Fname)
+{
+	//display stuff
+	cout << "Portfolio Report" << endl;
+	cout << "================" << endl;
+	//declare variables
+	string company;
+	int shares;
+	double purchase_price, current_price, profits, total = 0;
+	//create input file object 
+	ifstream infile;
+	//open file
+	infile.open(Fname);
+	//verify file was opened correctly
+	if (!infile.is_open())
+	{
+		cout << "File doesn't exist" << endl;
+	}
+	else
+	{
+		//display stuff
+		cout << endl;
+		cout << setw(20) << left << "Company" << setw(10) << right << "Profit(Loss)" << endl;
+		cout << endl;
+		cout << setprecision(2) << fixed;
+		getline(infile, company, '#');
+		while (!infile.eof())
+		{
+			infile >> shares;
+			infile >> purchase_price;
+			infile >> current_price;
+			//calculate profits/losses
+			profits = shares * (current_price - purchase_price);
+			//display
+			total = total + profits;
+			infile.ignore();
+			cout << setw(20) << left << company << "$  " << setw(8) << right << profits << endl;
+			getline(infile, company, '#');
+		}
+
+	}
+	cout << endl;
+	cout << setw(20) << left << "Total Value" << "$  " << setw(8) << right << total << endl;
+	//close file
+	infile.close();
+}
+
+/*
+What is the name of the file to process? stocks.txt
+
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 2
+Portfolio Report
+================
+
+Company             Profit(Loss)
+
+Amgen               $   4975.00
+Delta               $  -1450.00
+Novell              $    937.50
+PPG Inc             $   -225.00
+Timken              $  -5850.00
+HP                  $   1475.00
+
+Total Value         $   -137.50
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 1
+Enter company (X to stop adding records): Cisco
+Enter number of shares: 400
+Enter purchase price: 22.00
+Enter current price: 16.50
+Enter company (X to stop adding records): Intuit
+Enter number of shares: 250
+Enter purchase price: 38.00
+Enter current price: 44.50
+Enter company (X to stop adding records): ToysRUs
+Enter number of shares: 300
+Enter purchase price: 15.90
+Enter current price: 17.95
+Enter company (X to stop adding records): x
+New records have been added
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 2
+Portfolio Report
+================
+
+Company             Profit(Loss)
+
+Amgen               $   4975.00
+Delta               $  -1450.00
+Novell              $    937.50
+PPG Inc             $   -225.00
+Timken              $  -5850.00
+HP                  $   1475.00
+Cisco               $  -2200.00
+Intuit              $   1625.00
+ToysRUs             $    615.00
+
+Total Value         $    -97.50
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 1
+Enter company (X to stop adding records): Marvel
+Enter number of shares: 100
+Enter purchase price: 50
+Enter current price: 100
+Enter company (X to stop adding records): DC
+Enter number of shares: 1000
+Enter purchase price: 10
+Enter current price: 5
+Enter company (X to stop adding records): CoralReef
+Enter number of shares: 17
+Enter purchase price: 25
+Enter current price: 25
+Enter company (X to stop adding records): Forever
+Enter number of shares: 68
+Enter purchase price: 41
+Enter current price: 45
+Enter company (X to stop adding records): x
+New records have been added
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 2
+Portfolio Report
+================
+
+Company             Profit(Loss)
+
+Amgen               $   4975.00
+Delta               $  -1450.00
+Novell              $    937.50
+PPG Inc             $   -225.00
+Timken              $  -5850.00
+HP                  $   1475.00
+Cisco               $  -2200.00
+Intuit              $   1625.00
+ToysRUs             $    615.00
+Marvel              $   5000.00
+DC                  $  -5000.00
+CoralReef           $      0.00
+Forever             $    272.00
+
+Total Value         $    174.50
+Options
+1      Add Stock
+2      Display Profit/Loss
+3      Exit Program
+Enter menu option: 3
+Programmed by Amani Ansari 
+*/
+
+/*
+Input File:
+Amgen#200 50.75 75.625
+Delta#100 111.75 97.25
+Novell#500 10.375 12.25
+PPG Inc#100 56.75 54.5
+Timken#300 34.625 15.125
+HP#100 100.50 115.25 
+Same File after Program has run: 
+Amgen#200 50.75 75.625
+Delta#100 111.75 97.25
+Novell#500 10.375 12.25
+PPG Inc#100 56.75 54.5
+Timken#300 34.625 15.125
+HP#100 100.50 115.25
+Cisco#400 22 16.5
+Intuit#250 38 44.5
+ToysRUs#300 15.9 17.95
+Marvel#100 50 100
+DC#1000 10 5
+CoralReef#17 25 25
+Forever#68 41 45
+*/
