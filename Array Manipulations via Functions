@@ -1,0 +1,173 @@
+//This program does various array manipulations via functions 
+#include <ctime>
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+//prototypes
+void initArray(int[], int);
+void printArray(int[], int, int);
+int findMax(int[], int);
+int findMin(int[], int);
+double findAvg(int[], int);
+void reverseArray(int[], int[], int);
+
+void main()
+{
+	//declare a constant for size of array
+	const int maxnums = 50;
+	//declare two 1-dimensional arrays the size of maxnums and any other variables needed
+	int rand[maxnums], reverse[maxnums];
+	int max, min;
+	double avg;
+	//call initArray to store numbers in array
+	initArray(rand, maxnums);
+	//call printArray to print with 5 numbers per row
+	printArray(rand, maxnums, 5);
+	//call findMax to determine max
+	max = findMax(rand, maxnums);
+	//call findMin to determine min
+	min = findMin(rand, maxnums);
+	//call findAvg to determine average
+	avg = findAvg(rand, maxnums);
+	//print minimum, maximum, average
+	cout << endl;
+	cout << "The largest number is " << max << endl;
+	cout << "The smallest number is " << min << endl;
+	cout << "The average is " << avg << endl;
+	
+	//call reverseArray to store numbers in second array in reverse order
+	reverseArray(rand, reverse, maxnums);
+	//call printArray to print the reversed array with 7 numbers per row
+	printArray(reverse, maxnums, 7);
+	//Programmed by
+	cout << "Programmed by Amani Ansari" << endl;
+}
+
+//initArray
+void initArray(int rnums[], int size)
+{
+	//seed random number generator 
+	srand(time(0));
+	//put random numbers into array
+	for (int i = 0; i < size; i++)
+		rnums[i] = 1 + rand() % 999;
+	cout << "The numbers are:" << endl;
+}
+
+//printArray
+void printArray(int random[], int size, int number_val)
+{
+	for (int i = 0; i < size; i++)
+	{
+		cout << setw(6) << random[i];
+		if ((i + 1) % number_val == 0)
+			cout << endl;
+	}
+	cout << endl;
+}
+
+//findMax
+int findMax(int nums[], int amount)
+{
+	int highest;
+	highest = nums[0];
+	for (int i = 0; i < amount; i++)
+	{
+		if (nums[i] > highest)
+			highest = nums[i];
+	}
+	return highest;
+}
+
+//findMin
+int findMin(int array[], int size)
+{
+	int lowest;
+	lowest = array[0];
+	for (int i = 0; i < size; i++)
+	{
+		if (array[i] < lowest)
+			lowest = array[i];
+	}
+	return lowest;
+}
+
+//findAvg
+double findAvg(int nums[], int size)
+{
+	//initialize total
+	int total = 0;
+	double average;
+	for (int i = 0; i < size; i++)
+	{
+		total = total + nums[i];
+	}
+	average = (double)(total) / size;
+	cout << setprecision(1) << fixed;
+	return average;
+}
+
+//reverseArray
+void reverseArray(int array[], int reverse[], int size)
+{
+	for (int i = size - 1; i > -1; i--)
+	{
+		reverse[size - 1 - i] = array[i];
+	}
+	cout << endl;
+	cout << "The reversed numbers are:" << endl;
+}
+
+/*
+The numbers are:
+473   569    93   501   916
+408   519   630   768   348
+594   194   902   506   340
+591   111   531   140   877
+635   101   362   779   990
+552   725    99    90    18
+
+
+The largest number is 990
+The smallest number is 18
+The average is 478.7
+
+The reversed numbers are:
+18    90    99   725   552   990   779
+362   101   635   877   140   531   111
+591   340   506   902   194   594   348
+768   630   519   408   916   501    93
+569   473
+Programmed by Amani Ansari
+
+____________________________________________
+
+The numbers are:
+686    98   597   744   219
+296   226   171   669   933
+970    60   135   667    40
+468   582   541   853   873
+967   544   279   973   910
+475   534   464   266   540
+99   614   703   507   350
+58   626   642   448   433
+958    55   403   489   723
+678   836   892   520   906
+
+
+The largest number is 973
+The smallest number is 40
+The average is 534.4
+
+The reversed numbers are:
+906   520   892   836   678   723   489
+403    55   958   433   448   642   626
+58   350   507   703   614    99   540
+266   464   534   475   910   973   279
+544   967   873   853   541   582   468
+40   667   135    60   970   933   669
+171   226   296   219   744   597    98
+686
+Programmed by Amani Ansari
+*/
