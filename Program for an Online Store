@@ -1,0 +1,371 @@
+
+/*
+Input File: inventory.txt
+
+Common Sword#50 10 0
+Jumping Potion#85 5 0
+Breastplate#230 7 0
+Steel Shield#100 5 0
+Wooden Shield#250 3 0
+Iron Sword#100 5 0
+War Axe#100 10 0
+/*
+
+//This program serves as an online store, after the user is done shopping a revenue and reorder report are generated, and updated data it saved to a file. 
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+using namespace std;
+
+//create stucture
+struct Item
+{
+	string description;
+	double price;
+	int inStock, sold;
+};
+
+//function prototypes
+int getData(Item[], int);
+void showItems(Item[], int);
+void printRevenue(Item[], int);
+void printReorder(Item[], int);
+void saveData(Item[], int);
+
+//void main
+void main()
+{
+	//create array
+	int const size = 50;
+	Item array[size];
+	//declare variables
+	int items, item_num, quantity;
+	//function call
+	items = getData(array, size);
+	cout << "Number of items: " << items << endl;
+	cout << endl;
+	cout << "Store is now open!" << endl;
+	cout << endl;
+	//call showItem
+	showItems(array, items);
+	cout << endl;
+	cout << "Enter item number or -1 to quit: ";
+	cin >> item_num;
+	while (item_num != -1)
+	{
+		//validate item_num
+		while (item_num < 1 || item_num > items)
+		{
+			cout << "Invalid item number, re-enter ";
+			cin >> item_num;
+		}
+		//display stuff
+		//make sure item in stock
+		if (array[item_num - 1].inStock < 1)
+		{
+			cout << "This item is currently unavailable, please re-enter another item: ";
+			cin >> item_num;
+		}
+		else 
+		{
+			cout << "You selected " << array[item_num - 1].description << endl;
+			cout << "Price is " << array[item_num - 1].price << endl;
+			cout << "How many? ";
+			cin >> quantity;
+			//validate quantity
+			while (quantity < 1)
+			{
+				cout << "Invalid quantity, re-enter: ";
+				cin >> quantity;
+			}
+			//make sure there is enough stock for this order
+			while(quantity > array[item_num - 1].inStock)
+			{
+				cout << "The max number of this item is " << array[item_num - 1].inStock << " , re-enter: ";
+				cin >> quantity;
+			}
+				cout << "Amount due: $ " << (quantity * array[item_num - 1].price) << endl;
+				cout << endl;
+				//update stock and sold
+				array[item_num - 1].inStock  = array[item_num - 1].inStock - quantity;
+				array[item_num - 1].sold = array[item_num - 1].sold + quantity;
+				cout << "Enter item number or -1 to quit: ";
+				cin >> item_num;
+		} //end else
+	}
+	//call printRevenue
+	printRevenue(array, items);
+	//call printReorder
+	printReorder(array, items);
+	//call saveData
+	saveData(array, items);
+	cout << "Programmed by Amani Ansari" << endl;
+} //end main
+
+//getData
+int getData(Item weaponry[], int asize)
+{
+	//declare variables
+	string fileName;
+	int count = 0;
+	//declare file
+	ifstream infile;
+	//prompt for file name
+	cout << "File name: ";
+	cin >> fileName;
+	//open file
+	infile.open(fileName);
+	//verify file was opened
+	if (!infile.is_open())
+	{
+		cout << "File doesn't exist" << endl;
+	}
+	else
+	{
+		cout << "Reading file" << endl;
+		//begin reading file
+		getline(infile, weaponry[0].description, '#');
+		while (!infile.eof())
+		{
+			infile >> weaponry[count].price;
+			infile >> weaponry[count].inStock;
+			infile >> weaponry[count].sold;
+			//increment counter
+			count++;
+			//fix error
+			infile.ignore();
+			//continue reading file
+			getline(infile, weaponry[count].description, '#');
+		}
+		return count;
+	}
+}
+
+//showItems
+void showItems(Item array[], int asize)
+{
+	//declare variables
+	int count = 1, i;
+	//Display stuff
+	cout << "PRODUCT LIST" << endl;
+	cout << "Item" << setw(9) << "Desc" << setw(16) << "Price" << setw(7) << "Qty" << endl;
+	for (i = 0; i < asize; i++)
+	{
+		cout << setw(3) << right << count << " "<< setw(20) << left << array[i].description << setw(5) << right << array[i].price << setw(6) << array[i].inStock << endl;
+		count++;
+	}
+}
+
+//printRevenue
+void printRevenue(Item print[], int size)
+{
+	//declare variables
+	double total = 0;
+	cout << endl;
+	cout << "REVENUE REPORT" << endl;
+	cout << "ITEM" << setw(20) << "SOLD" << setw(10) << "REVENUE" << endl;
+	for (int i = 0; i < size; i++)
+	{
+		cout << setw(15) << left << print[i].description << setw(8) << right << print[i].sold << setw(8) << (print[i].sold * print[i].price) << endl;
+		total = (print[i].sold * print[i].price) + total;
+	}
+	cout << endl;
+	cout << "Total sales: " << total << endl;
+	cout << endl;
+}
+
+//printReorder
+void printReorder(Item reorder[], int size)
+{
+	cout << "REORDER REPORT" << endl;
+	cout << "Items to re-order" << endl;
+	for (int i = 0; i < size; i++)
+	{
+		if (reorder[i].inStock == 0)
+		{
+			cout << reorder[i].description << endl;
+		}
+	}
+}
+
+//saveData
+void saveData(Item save[], int size)
+{
+	//declare variables
+	string fileName;
+	//create output file
+	ofstream outfile;
+	//prompt for output file name
+	cout << endl;
+	cout << "Output file name: ";
+	cin >> fileName;
+	//open file
+	outfile.open(fileName);
+	for (int i = 0; i < size; i++)
+	{
+		outfile << save[i].description << "#" << save[i].price << " " << save[i].inStock << " " << save[i].sold << endl;
+	}
+}
+
+/*
+Runtime Output:
+
+File name: inventory.txt
+Reading file
+Number of items: 7
+
+Store is now open!
+
+PRODUCT LIST
+Item     Desc           Price    Qty
+1 Common Sword           50    10
+2 Jumping Potion         85     5
+3 Breastplate           230     7
+4 Steel Shield          100     5
+5 Wooden Shield         250     3
+6 Iron Sword            100     5
+7 War Axe               100    10
+
+Enter item number or -1 to quit: -5
+Invalid item number, re-enter 0
+Invalid item number, re-enter 8
+Invalid item number, re-enter 1
+You selected Common Sword
+Price is 50
+How many? 1
+Amount due: $ 50
+
+Enter item number or -1 to quit: 6
+You selected Iron Sword
+Price is 100
+How many? 7
+The max number of this item is 5 , re-enter: 5
+Amount due: $ 500
+
+Enter item number or -1 to quit: 3
+You selected Breastplate
+Price is 230
+How many? -5
+Invalid quantity, re-enter: 0
+Invalid quantity, re-enter: 9
+The max number of this item is 7 , re-enter: 7
+Amount due: $ 1610
+
+Enter item number or -1 to quit: 3
+This item is currently unavailable, please re-enter another item: 6
+This item is currently unavailable, please re-enter another item: 4
+You selected Steel Shield
+Price is 100
+How many? 4
+Amount due: $ 400
+
+Enter item number or -1 to quit: 7
+You selected War Axe
+Price is 100
+How many? 4
+Amount due: $ 400
+
+Enter item number or -1 to quit: -1
+
+REVENUE REPORT
+ITEM                SOLD   REVENUE
+Common Sword          1      50
+Jumping Potion        0       0
+Breastplate           7    1610
+Steel Shield          4     400
+Wooden Shield         0       0
+Iron Sword            5     500
+War Axe               4     400
+
+Total sales: 2960
+
+REORDER REPORT
+Items to re-order
+Breastplate
+Iron Sword
+
+Output file name: update.txt
+Programmed by Amani Ansari
+
+File name: update.txt
+Reading file
+Number of items: 7
+
+Store is now open!
+
+PRODUCT LIST
+Item     Desc           Price    Qty
+1 Common Sword           50     9
+2 Jumping Potion         85     5
+3 Breastplate           230     0
+4 Steel Shield          100     1
+5 Wooden Shield         250     3
+6 Iron Sword            100     0
+7 War Axe               100     6
+
+Enter item number or -1 to quit: 1
+You selected Common Sword
+Price is 50
+How many? 9
+Amount due: $ 450
+
+Enter item number or -1 to quit: 3
+This item is currently unavailable, please re-enter another item: 6
+This item is currently unavailable, please re-enter another item: 5
+You selected Wooden Shield
+Price is 250
+How many? 3
+Amount due: $ 750
+
+Enter item number or -1 to quit: 5
+This item is currently unavailable, please re-enter another item: 7
+You selected War Axe
+Price is 100
+How many? 2
+Amount due: $ 200
+
+Enter item number or -1 to quit: 1
+This item is currently unavailable, please re-enter another item: 4
+You selected Steel Shield
+Price is 100
+How many? 1
+Amount due: $ 100
+
+Enter item number or -1 to quit: -1
+
+REVENUE REPORT
+ITEM                SOLD   REVENUE
+Common Sword         10     500
+Jumping Potion        0       0
+Breastplate           7    1610
+Steel Shield          5     500
+Wooden Shield         3     750
+Iron Sword            5     500
+War Axe               6     600
+
+Total sales: 4460
+
+REORDER REPORT
+Items to re-order
+Common Sword
+Breastplate
+Steel Shield
+Wooden Shield
+Iron Sword
+
+Output file name: update2.txt
+Programmed by Amani Ansari
+*/
+
+/*
+Output File: update.txt
+
+Common Sword#50 9 1
+Jumping Potion#85 5 0
+Breastplate#230 0 7
+Steel Shield#100 1 4
+Wooden Shield#250 3 0
+Iron Sword#100 0 5
+War Axe#100 6 4
+*/
